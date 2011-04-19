@@ -37,7 +37,7 @@ if (typeof Object.create !== 'function'){
   }
 
   snack.extend({
-    v: '1.1.0',
+    v: '1.1.0dev',
 
     bind: function (fn, context) {
       return function (){
