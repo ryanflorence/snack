@@ -37,11 +37,23 @@ if (typeof Object.create !== 'function'){
   }
 
   snack.extend({
-    v: '%build%',
+    v: '1.1.0',
 
     bind: function (fn, context) {
       return function (){
         return fn.apply(context, arguments)
+      }
+    },
+
+    punch: function (obj, method, fn, auto){
+      var old = obj[method]
+      obj[method] = auto ? function (){
+        old.apply(obj, arguments)
+        return fn.apply(obj, arguments)
+      } : function (){
+        var args = [].slice.call(arguments, 0)
+        args.unshift(snack.bind(old, obj))
+        return fn.apply(obj, args)
       }
     },
 
