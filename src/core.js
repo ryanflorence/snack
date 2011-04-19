@@ -10,6 +10,7 @@
 */
 
 if (typeof Object.create !== 'function'){
+  // ES5 Obeject.create
   Object.create = function (o){
     function F() {}
     F.prototype = o
@@ -18,7 +19,6 @@ if (typeof Object.create !== 'function'){
 }
 
 !function(window){
-
   var snack = window.snack = {}
     , guid = 0
     , toString = Object.prototype.toString
@@ -74,6 +74,7 @@ if (typeof Object.create !== 'function'){
     },
 
     parseJSON: function(json) {
+      // adapted from jQuery
       if (typeof json !== 'string')
         return
 

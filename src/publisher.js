@@ -1,5 +1,4 @@
 !function (snack){
-
   snack.publisher = function (obj){
     var channels = {}
     obj = obj || {}
@@ -42,5 +41,4 @@
   }
 
   snack.publisher(snack)
-
 }(snack);

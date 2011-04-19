@@ -1,6 +1,7 @@
 !function(snack, document){
   snack.wrap.define({
     data: function (){
+      // API inspired by jQuery
       var storage = {}
 
       return function (key, value){
@@ -21,6 +22,7 @@
     },
   
     addClass: function (className){
+      // adapted from MooTools
       return this.each(function (element){
         if (clean(element.className).indexOf(className) > -1)
           return
@@ -29,6 +31,7 @@
     },
 
     removeClass: function (className){
+      // adapted from MooTools
       return this.each(function (element){
         element.className = element.className.replace(new RegExp('(^|\\s)' + className + '(?:\\s|$)'), '$1')
       })
