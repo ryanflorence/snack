@@ -1,0 +1,95 @@
+/*!
+  * snack.js (c) Ryan Florence
+  * https://github.com/rpflorence/snack
+  * MIT License
+  * Inspiration and code adapted from
+  *  MooTools      (c) Valerio Proietti   MIT license
+  *  jQuery        (c) John Resig         Dual license MIT or GPL Version 2
+  *  contentLoaded (c) Diego Perini       MIT License
+  *  Zepto.js      (c) Thomas Fuchs       MIT License
+*/
+
+if (typeof Object.create !== 'function'){
+  Object.create = function (o){
+    function F() {}
+    F.prototype = o
+    return new F
+  }
+}
+
+!function(window){
+
+  var snack = window.snack = {}
+    , guid = 0
+    , toString = Object.prototype.toString
+
+  snack.extend = function (){
+    if (arguments.length === 1)
+      return snack.extend(snack, arguments[0])
+
+    var target = arguments[0]
+
+    for (var i = 1, l = arguments.length; i < l; i++)
+      for (key in arguments[i])
+        target[key] = arguments[i][key]
+
+    return target
+  }
+
+  snack.extend({
+    v: '%build%',
+
+    bind: function (fn, context) {
+      return function (){
+        return fn.apply(context, arguments)
+      }
+    },
+
+    id: function (){
+      return ++guid
+    },
+
+    each: function (obj, fn, context){
+      if (obj.length === undefined){ // loose check for object, we want array-like objects to be treated as arrays
+        for (var key in obj) // no hasOwnProperty check, so watch the prototypes :P
+          fn.call(context, obj[key], key, obj);
+        return obj
+      }
+
+      for (var i = 0, l = obj.length; i < l; i++)
+        fn.call(context, obj[i], i, obj)
+      return obj
+    },
+
+    parseJSON: function(json) {
+      if (typeof json !== 'string')
+        return
+
+      json = json.replace(/^\s+|\s+$/g, '')
+
+      var isValid = /^[\],:{}\s]*$/.test(json.replace(/\\(?:["\\\/bfnrt]|u[0-9a-fA-F]{4})/g, "@")
+        .replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, "]")
+        .replace(/(?:^|:|,)(?:\s*\[)+/g, ""))
+
+      if (!isValid)
+        throw "Invalid JSON"
+      
+      var JSON = window.JSON // saves a couple bytes
+      return JSON && JSON.parse ? JSON.parse(json) : (new Function("return " + json))()
+    },
+
+    isArray: function (obj){
+      return toString.call(obj) === "[object Array]"
+    },
+
+    indexOf: [].indexOf ? function(item, array){
+        return [].indexOf.call(array, item)
+      } : function (item, array){
+      for (var i = 0, l = array.length; i < l; i++)
+        if (array[i] === item)
+          return i
+
+      return -1
+    }
+  })
+}(window);

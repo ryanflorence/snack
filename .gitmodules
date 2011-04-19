@@ -1,0 +1,12 @@
+[submodule "vendor/qunit"]
+	path = vendor/qunit
+	url = git://github.com/jquery/qunit.git
+[submodule "vendor/qwery"]
+	path = vendor/qwery
+	url = git://github.com/ded/qwery.git
+[submodule "vendor/slick"]
+	path = vendor/slick
+	url = git://github.com/mootools/slick.git
+[submodule "vendor/sizzle"]
+	path = vendor/sizzle
+	url = git://github.com/jquery/sizzle.git

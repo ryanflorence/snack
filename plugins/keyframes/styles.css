@@ -1,0 +1,30 @@
+#fixture {
+  background: #ccc;
+  width: 50px;
+  height: 50px;
+  -webkit-border-radius: 25px;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+}
+
+#fixture[data-frame='0']{
+  left: 0px;
+}
+
+#fixture[data-frame='20']{
+  left: 20px;
+}
+
+#fixture[data-frame='40']{
+  left: 40px;
+}
+
+#fixture[data-frame='60']{
+  left: 60px;
+}
+
+#fixture[data-frame='80']{
+  left: 80px;
+  background-color: red;
+}

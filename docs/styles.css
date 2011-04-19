@@ -1,0 +1,328 @@
+body {
+  font-family: 'Lucida Grande', helvetica, arial;
+  margin: 0;
+  line-height: 1.3;
+  color: #444;
+  font-size: 75%;
+}
+
+ol,
+ul {
+  margin: 1em 0;
+}
+
+a {
+  color: #3d71be;
+}
+
+h1 {
+  display: none;
+}
+
+h2 {
+  position: relative;
+  color: #fff;
+  margin: 0 -20px;
+  padding: 0 20px;
+  font-size: 120%;  
+}
+
+h2:after {
+  background-color: #93A4AD;
+  background-image: -moz-linear-gradient(top, #93A4AD, #B5BFC5); 
+  background-image: -o-linear-gradient(top, #93A4AD, #B5BFC5); 
+  background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0, #93A4AD),color-stop(1, #B5BFC5)); 
+  background-image: -webkit-linear-gradient(#93A4AD, #B5BFC5); 
+  background-image: linear-gradient(top, #93A4AD, #B5BFC5);
+  -webkit-box-shadow: 0px -1px 0px #939EA5;
+  border-bottom: solid 1px #939EA5; 
+  border-top: 1px solid #b6c2ca;
+  
+  /*opacity: 0.9;*/
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+h2 a {
+  text-shadow: 0 1px 0px rgba(0, 0, 0, 0.5);
+  position: relative;
+  z-index: 1;
+  display: block;
+  padding: 1px;
+}
+
+h2 + p {
+  font-size: 120%;
+  color: #000;
+}
+
+h3 {
+  color: #4086ad;
+}
+
+#header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  height: 34px;
+  border-bottom: solid 1px #888;
+
+  background-color: #505457;
+  background-image: -moz-linear-gradient(top, #f0f0f0, #bbb); 
+  background-image: -o-linear-gradient(top, #f0f0f0, #bbb); 
+  background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0, #f0f0f0),color-stop(1, #bbb)); 
+  background-image: -webkit-linear-gradient(#f0f0f0, #bbb); 
+  background-image: linear-gradient(top, #f0f0f0, #bbb);
+}
+
+#links {
+	position: absolute;
+	right: 0px;
+	top: 0px;
+	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+#links li {
+	float: left;
+}
+
+#links a {
+	display: block;
+	height: 14px;
+	padding: 10px;
+	color: #000;
+	border-left: solid 1px #999;
+	text-decoration: none;
+  background-color: #eee;
+  background-image: -moz-linear-gradient(top, #f0f0f0, #bbb); 
+  background-image: -o-linear-gradient(top, #f0f0f0, #bbb); 
+  background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0, #fff),color-stop(1, #ccc)); 
+  background-image: -webkit-linear-gradient(#f0f0f0, #bbb); 
+  background-image: linear-gradient(top, #f0f0f0, #bbb);
+}
+
+#links a:hover {
+  background-color: #eee;
+  background-image: -moz-linear-gradient(top, #f0f0f0, #bbb); 
+  background-image: -o-linear-gradient(top, #f0f0f0, #bbb); 
+  background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0, #fff),color-stop(1, #ddd)); 
+  background-image: -webkit-linear-gradient(#f0f0f0, #bbb); 
+  background-image: linear-gradient(top, #f0f0f0, #bbb);	
+}
+
+#snack {
+	display: block;
+}
+
+#terms {
+  width: 280px;
+  margin: 8px;
+  display: block;
+  outline: none;
+}
+
+#terms:focus {
+  outline: none;
+}
+
+#docs section > ol,
+#docs section > ul {
+  padding: 0 1.5em;
+}
+
+#docs {
+  position: absolute;
+  left: 301px;
+  top: 35px;
+  bottom: 0;
+  right: 0;
+  padding: 0 20px;
+  overflow: auto;
+  background: #ff;
+}
+
+#nav {
+  padding: 0;
+  margin: 0;
+  width: 300px;
+  position: absolute;
+  top: 35px;
+  left: 0;
+  bottom: 0;
+  overflow: auto;
+  border-right: solid 1px #888;
+  color: #5b666b;
+  text-shadow: 0 1px 0px rgba(255, 255, 255, 1);
+  background-color: #dde4ea;
+}
+
+#nav a,
+#docs h1 a,
+#docs h2 a,
+#docs h3 a {
+  color: inherit;
+  text-decoration: none;
+}
+
+#docs h2 a:hover,
+#docs h3 a:hover {
+  text-decoration: underline;
+}
+
+#nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+#nav a {
+  display: block;
+  padding: 0.25em 0.5em;
+}
+
+#nav > li {
+  list-style: none;
+}
+
+#nav h2 {
+  color: #fff;
+  margin: 0;
+  font-size: 100%;
+  padding: 0;
+  text-shadow: 0 1px 0px rgba(0, 0, 0, 0.5);
+  font-weight: normal;
+}
+
+#nav h2:after {
+  border-bottom: solid 1px #505457; 
+  border-top: 1px solid #848d93;
+  -webkit-box-shadow: 0px -1px 0px #505457;
+
+  background-color: #505457;
+  background-image: -moz-linear-gradient(top, #5b666b, #505457); 
+  background-image: -o-linear-gradient(top, #5b666b, #B5BFC5); 
+  background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0, #5b666b),color-stop(1, #505457)); 
+  background-image: -webkit-linear-gradient(#5b666b, #505457); 
+  background-image: linear-gradient(top, #5b666b, #505457);
+  /*opacity: 0.75;*/
+}
+
+#nav ul a {
+  border-top: solid 1px #ccc;
+  padding: 0.5em;
+  position: relative;
+}
+
+#nav ul:first-child li:first-child a {
+  border-top: none;
+}
+
+#nav ul a:hover {
+  color: #000;
+}
+
+#nav ul ul a{
+  padding-left: 1.25em;
+}
+
+#nav ul ul ul a{
+  padding-left: 2em;
+}
+
+#nav ul ul ul ul a{
+  padding-left: 2.75em;
+}
+
+#nav ul a:before,
+#nav ul a:after {
+  position: absolute;
+  content: "";
+  height: 0px;
+  width: 0px;
+  top: 6px;
+  border-style: solid;
+  border-width: 8px;
+}
+
+#nav ul a:after {
+  right: 4px;
+  border-color: transparent transparent transparent #dde4ea;
+}
+
+#nav ul a:before {
+  right: 0px;
+  border-color: transparent transparent transparent #93A4AD;
+}
+
+#nav ul a:hover:before {
+  border-left-color: #000;
+}
+
+pre {
+  border: 1px solid #cedce9;
+  background: #edf3f9;
+  padding: 10px;
+  overflow: auto;
+}
+
+pre.sig {
+  border-color: #59666A;
+  background: #cedce9;
+  color: #000;
+}
+
+code {
+  background: #f4f9fe;
+  color: #5B666B;
+}
+
+pre code {
+  background: inherit;
+  color: inherit;
+}
+
+code {
+  font-size: 120%;
+}
+
+code .keyword              {
+  color: #5e399b;
+}
+code .string, code .regexp { 
+color: #596367;
+  background-color: #e5eaef;
+}
+code .class, code .special { color: #1c6393}
+code .number               { color: #848d93}
+code .comment              { color: #fe9700}
+
+code .snack {
+  color: #007ffe;
+  font-weight: bold;
+}
+
+code .snack_method {
+  color: #007ffe;
+}
+
+.sig code .snack {
+  color: inherit;
+  font-weight: normal;
+}
+
+.sig code .snack_method {
+  color: inherit;
+}
+
+@media all and (min-device-width: 481px) and (max-device-width: 1024px) {
+
+}

@@ -1,0 +1,118 @@
+/* these styles are not IE6 friendly, but the JS works :P */
+
+body {
+  font-family: Helvetica, Arial;
+  background: #555;
+  line-height: 1.3;
+  font-size: 14px;
+  color: #444;
+}
+
+#search {
+  margin: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 40px;
+  background: #ccc;
+  padding: 10px;
+  font-size: 26px;
+  color: #000;
+  text-align: center;
+
+  min-width: 800px;
+
+  -webkit-box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+  -moz-box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+
+  background-color: #eeeeee;
+  background-image: -moz-linear-gradient(top, #eeeeee, #999999); 
+  background-image: -o-linear-gradient(top, #eeeeee, #999999); 
+  background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0, #eeeeee),color-stop(1, #999999)); 
+  background-image: -webkit-linear-gradient(#eeeeee, #999999); 
+  background-image: linear-gradient(top, #eeeeee, #999999);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#eeeeee', EndColorStr='#999999'); 
+  z-index: 1;
+}
+
+small {
+  font-size: 12px;
+}
+
+small a {
+  color: #444;
+}
+
+#google-news {
+  width: 300px;
+  font-size: 26px;
+}
+
+#results {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 60px;
+  bottom: 0;
+  overflow: auto;
+  padding: 0;
+  margin: 0;
+  opacity: 1;
+}
+
+#results.loading li {
+  opacity: 0;
+  -webkit-transition: opacity 150ms ease;
+}
+
+#results > li {
+  margin: 20px;
+  padding: 20px;
+  list-style: none;
+  background: #fff;
+  -webkit-box-shadow: 0 2px 3px rgba(0,0,0,0.85);
+  -webkit-border-radius: 6px;
+}
+
+#results img {
+  float: left;
+  border: solid 1px #ccc;
+  padding: 1px;
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+
+#results h1 {
+  font-size: 125%;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+#results p {
+  clear: left;
+}
+
+#results .meta {
+  list-style: none;
+  padding: 0;
+  font-size: 80%;
+}
+
+#results h2 {
+  font-size: 100%;
+}
+
+#results > li > ul {
+  list-style: square;
+}
+
+#results a {
+  color: #54A1DA;
+  text-decoration: none;
+}
+
+#results a:hover {
+  text-decoration: underline;
+}

@@ -1,0 +1,90 @@
+/* @override http://localhost:3000/demos/delegation/style.css */
+
+html {
+  overflow-y: scroll;
+}
+
+body {
+  font-family: helvetica, arial;
+  background: #fff;
+  font-size: 13px;
+}
+
+img[align=left] {
+  margin-right: 1em;
+  margin-bottom: 1em;
+}
+
+img[align=right] {
+  margin-left: 1em;
+  margin-bottom: 1em;
+}
+
+#tabs {
+  width: 600px;
+  margin: auto;
+  position: relative;
+}
+
+#tabs ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  overflow: auto;
+  text-align: center;
+}
+
+#tabs li {
+  float: left;
+}
+
+.panel {
+  width: 100%;
+  background: #fff;
+  overflow: hidden;
+
+  height: 0;
+  opacity: 0;
+}
+
+.no_js .panel {
+  position: static;
+  opacity: 1;
+}
+
+.current {
+  height: auto;
+  padding: 5px;
+  opacity: 1;
+
+  -webkit-transition: opacity 400ms ease;
+  -moz-transition: opacity 400ms ease;
+  -o-transition: opacity 400ms ease;
+  -ms-transition: opacity 400ms ease;
+  transition: opacity 400ms ease;
+}
+
+.links a {
+  width: 130px;
+  padding: 10px;
+  margin: 5px;
+  display: block;
+  color: #444;
+  text-decoration: none;
+  background: #ccc;
+  text-align: center;
+}
+
+.links a:hover {
+  background: #ddd;
+}
+
+.links a.current {
+	background: #444;
+	color: #fff;
+}
+
+.footer {
+  text-align: center;
+  color: #999;
+}
