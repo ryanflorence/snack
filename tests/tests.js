@@ -70,7 +70,7 @@ function simulateClick (element){
 
 
 
-module('utilities')
+module('core')
 test('indexOf', function (){
   var a = function (){}
     , b = function (){}
@@ -94,31 +94,57 @@ test('indexOf', function (){
 
 
 
+test('punch should', function (){
+  var widget = {
+    a: 0,
+    b: 0,
+    add: function (amt){
+      this.a += amt
+    }
+  }
 
-module('snack.ready')
-asyncTest('DocumentContentLoaded', 2, function (){
-  // this test doesn't really test the effectiveness of simulating
-  // DOMContentLoaded, just that snack's implementation of the code
-  // is actually firing
-  snack.ready(function (){
-    ok(true, 'should fire')
-    
-    var immediate = false
-    snack.ready(function (){
-      immediate = true
-    })
-    ok(immediate, 'should fire immediately if dom is already ready')
-
-    start()
+  snack.punch(widget, 'add', function (old, amt){
+    old(amt)
+    this.b += amt
   })
+  widget.add(1)
+  equal(widget.a, 1, 'call the old method')
+  equal(widget.b, 1, 'call the new method')
+
+  snack.punch(widget, 'add', function (){}, true)
+  widget.add(1)
+  equal(widget.a, 2, 'call the really old method automatically')
+  equal(widget.b, 2, 'call the old method automatically')
+
+  snack.punch(widget, 'add', function (old){
+    return this.a + this.b
+  })
+  var result = widget.add(1)
+  equal(result, 4, 'should return what the new function returns')
 })
 
 
 
 
+module('event')
+asyncTest('ready should', 2, function (){
+  // this test doesn't really test the effectiveness of simulating
+  // DOMContentLoaded, just that snack's implementation of the code
+  // is actually firing
+  snack.ready(function (){
+    ok(true, 'fire')
+    
+    var immediate = false
+    snack.ready(function (){
+      immediate = true
+    })
+    ok(immediate, 'fire immediately if dom is already ready')
 
-module('snack.listener')
-test('a basic listener', function (){
+    start()
+  })
+})
+
+test('a listener should', function (){
 
   var fixture = document.getElementById('fixture')
     , c = 0
@@ -132,23 +158,23 @@ test('a basic listener', function (){
   })
 
   simulateClick(fixture)
-  equal(c, 1, 'should attach to an element and call the handler upon event')
+  equal(c, 1, 'attach to an element and call the handler upon event')
 
   listener.detach() // api
   simulateClick(fixture)
-  equal(c, 1, 'should be detachable')
+  equal(c, 1, 'be detachable')
 
   listener.attach() // api
   simulateClick(fixture)
-  equal(c, 2, 'should be attachable')
+  equal(c, 2, 'be attachable')
 
   listener.fire() // api
-  equal(c, 3, 'should be fireable')
+  equal(c, 3, 'be fireable')
 
   listener.detach()
 })
 
-test('a listener that delegates with a function', function (){
+test('a listener that delegates with a function should', function (){
 
   var fixture = document.getElementById('fixture')
     , delegatee = document.getElementById('delegatee')
@@ -168,18 +194,18 @@ var listener = snack.listener({
 })
 
   simulateClick(delegatee)
-  equal(c, 1, 'should delegate events')
+  equal(c, 1, 'delegate events')
 
   simulateClick(fixture)
-  equal(c, 1, 'should not fire when self is clicked')
+  equal(c, 1, 'not fire when self is clicked')
 
   simulateClick(notDelegatee)
-  equal(c, 1, 'should not fire when non-matching elements are clicked')
+  equal(c, 1, 'not fire when non-matching elements are clicked')
 
   listener.detach()
 })
 
-test('a listener that delegates with a css string', function (){
+test('a listener that delegates with a css string should', function (){
 
   var fixture = document.getElementById('fixture')
     , delegatee = document.getElementById('delegatee')
@@ -196,18 +222,18 @@ test('a listener that delegates with a css string', function (){
   })
 
   simulateClick(delegatee)
-  equal(c, 1, 'should delegate events')
+  equal(c, 1, 'delegate events')
 
   simulateClick(fixture)
-  equal(c, 1, 'should not fire when self is clicked')
+  equal(c, 1, 'not fire when self is clicked')
 
   simulateClick(notDelegatee)
-  equal(c, 1, 'should not fire when non-matching elements are clicked')
+  equal(c, 1, 'not fire when non-matching elements are clicked')
 
   listener.detach()
 })
 
-test('preventDefault', function (){
+test('preventDefault should', function (){
   var el = document.getElementById('preventDefault')
 
   snack.listener({
@@ -219,10 +245,10 @@ test('preventDefault', function (){
 
   simulateClick(el)
 
-  equal(location.hash, '', 'should prevent the default event')
+  equal(location.hash, '', 'prevent the default event')
 })
 
-test('stopPropagation', function (){
+test('stopPropagation should', function (){
   var el = document.getElementById('stopPropagation')
 
   snack.listener({
@@ -234,7 +260,7 @@ test('stopPropagation', function (){
 
   simulateClick(el)
 
-  notEqual(location.hash, '#fail', 'should prevent bubbling')
+  notEqual(location.hash, '#fail', 'prevent bubbling')
 })
 
 module('publisher')
@@ -332,7 +358,7 @@ test('listener', function (){
 
 
 
-module('snack.request')
+module('ajax')
 asyncTest('a snack.request object', 2, function (){
   var c = 0
 

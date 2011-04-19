@@ -8,7 +8,7 @@ Features
 
 ### Tiny!
 
-- ~3.2kb! (minified, gzipped, can't even see it when it turns to the side)
+- ~3.3kb! (minified, gzipped, can't even see it when it turns to the side)
 
 ### Elements
 

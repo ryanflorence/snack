@@ -24,6 +24,7 @@
       <li><a href="#Object.create">Object.create</a>
       <li><a href="#snack.extend">snack.extend</a>
       <li><a href="#snack.bind">snack.bind</a>
+      <li><a href="#snack.punch">snack.punch</a></li>
       <li><a href="#snack.id">snack.id</a>
       <li><a href="#snack.each">snack.each</a>
       <li><a href="#snack.parseJSON">snack.parseJSON</a>
@@ -277,6 +278,54 @@ snack.awesome //> true, you know it
   }
 }
 </code></pre>
+
+
+
+
+<h2 id=snack.punch><a href="#snack.punch">snack.punch</a></h2>
+<p>Mutates an object method with new logic (Duck punching).</p>
+
+<h3>Signature</h3>
+<pre class=sig><code>snack.punch(obj, method, fn [, auto])</code></pre>
+
+<h3>Arguments</h3>
+<ol>
+  <li><code>obj</code> (<b>object</b>) - The object who's method is getting punched.</li>
+  <li><code>method</code> (<b>string</b>) - The name of the object's method.</li>
+  <li>
+    <code>fn</code> (<b>function</b>) - The new function.
+    <p><b>Signature</b></p>
+    <pre class=sig><code>function ([old [, argN]])</code></pre>
+    <p><b>Arguments</b></p>
+    <ol>
+      <li><code>old</code> (<b>function</b>) - The old version of the method, (with context already bound to the object). <b>Note:</b> This argument is passed by default, if the <code>auto</code> argument is used then this argument will not be passed</li>
+      <li><code>argN</code> (<b>mixed</b>) - Any arguments passed when the method is called.</li>
+    </ol>
+  </li>
+  <li><code>auto</code> (<b>boolean</b>: optional, defaults to false) - If true, will automatically call the old method before calling the new one.</li>
+</ol>
+<h3>Returns</h3>
+<p><b>Undefined</b></p>
+<h3>Examples</h3>
+<pre><code>var widget = {
+  a: 0,
+  b: 0,
+  add: function (amt){
+    this.a += amt
+  }
+}
+
+snack.punch(widget, 'add', function (old, arg1, arg2){
+  old(arg1, arg2)
+  console.log('second', arg1, arg2)
+})
+
+punch(widget, 'foo', function (arg1, arg2){
+  console.log('third with auto', arg1, arg2)
+}, true)
+
+widget.foo(1,2) // logs all three statements</code></pre>
+
 
 
 

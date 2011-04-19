@@ -45,6 +45,18 @@ if (typeof Object.create !== 'function'){
       }
     },
 
+    punch: function (obj, method, fn, auto){
+      var old = obj[method]
+      obj[method] = auto ? function (){
+        old.apply(obj, arguments)
+        return fn.apply(obj, arguments)
+      } : function (){
+        var args = [].slice.call(arguments, 0)
+        args.unshift(snack.bind(old, obj))
+        return fn.apply(obj, args)
+      }
+    },
+
     id: function (){
       return ++guid
     },
