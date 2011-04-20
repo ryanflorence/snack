@@ -330,7 +330,7 @@ widget.add(1)
 widget.a //> 2
 widget.b //> 1
 
-snack.punch(widget, 'foo', function (){
+snack.punch(widget, 'add', function (){
   // the last arg (`auto`) is `true`, so old will be called before
   // this stuff happens.  Effectively the same as calling `old`
   // on the first line of this new function.
@@ -341,7 +341,7 @@ widget.add(1) // console logs "I'm adding stuff!"
 widget.a //> 3
 widget.b //> 2
 
-snack.punch(widget, 'foo', function (old){
+snack.punch(widget, 'add', function (old){
   return this.a + this.b
   // since `auto` is not true, and old is not called
   // this method has been completely overwritten
