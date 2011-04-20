@@ -315,16 +315,42 @@ snack.awesome //> true, you know it
   }
 }
 
-snack.punch(widget, 'add', function (old, arg1, arg2){
-  old(arg1, arg2)
-  console.log('second', arg1, arg2)
+widget.add(1)
+widget.a //> 1
+widget.b //> 0
+
+snack.punch(widget, 'add', function (old, amt){
+  // old is the old version of this method, already bound to widget
+  // call it wherever you want inside of here
+  old(amt)
+  this.b += amt
 })
 
-punch(widget, 'foo', function (arg1, arg2){
-  console.log('third with auto', arg1, arg2)
+widget.add(1)
+widget.a //> 2
+widget.b //> 1
+
+snack.punch(widget, 'foo', function (){
+  // the last arg (`auto`) is `true`, so old will be called before
+  // this stuff happens.  Effectively the same as calling `old`
+  // on the first line of this new function.
+  console.log("I'm adding stuff!")
 }, true)
 
-widget.foo(1,2) // logs all three statements</code></pre>
+widget.add(1) // console logs "I'm adding stuff!"
+widget.a //> 3
+widget.b //> 2
+
+snack.punch(widget, 'foo', function (old){
+  return this.a + this.b
+  // since `auto` is not true, and old is not called
+  // this method has been completely overwritten
+})
+
+var res = widget.add()
+res //> 5
+widget.a //> 3 ... unchanged
+widget.b //> 2 ... unchanged</code></pre>
 
 <h3>Notes</h3>
 <p>When using the <code>auto</code> argument, this is extremely similar to <code>dojo.connect</code> (minus the DOM events).  It's also not unlike <code>Extends</code> and <code>this.parent</code> in a MooTools class.  Think of the <code>old</code> argument as <code>this.parent</code>.</p>
