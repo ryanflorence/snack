@@ -63,8 +63,9 @@ if (typeof Object.create !== 'function'){
 
     each: function (obj, fn, context){
       if (obj.length === undefined){ // loose check for object, we want array-like objects to be treated as arrays
-        for (var key in obj) // no hasOwnProperty check, so watch the prototypes :P
-          fn.call(context, obj[key], key, obj);
+        for (var key in obj)
+          if (obj.hasOwnProperty(key))
+            fn.call(context, obj[key], key, obj);
         return obj
       }
 
