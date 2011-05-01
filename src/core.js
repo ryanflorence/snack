@@ -22,6 +22,7 @@ if (typeof Object.create !== 'function'){
   var snack = window.snack = {}
     , guid = 0
     , toString = Object.prototype.toString
+    , indexOf = Array.prototype.indexOf
 
   snack.extend = function (){
     if (arguments.length === 1)
@@ -96,8 +97,8 @@ if (typeof Object.create !== 'function'){
       return toString.call(obj) === "[object Array]"
     },
 
-    indexOf: [].indexOf ? function(item, array){
-        return [].indexOf.call(array, item)
+    indexOf: indexOf ? function(item, array){
+        return indexOf.call(array, item)
       } : function (item, array){
       for (var i = 0, l = array.length; i < l; i++)
         if (array[i] === item)
