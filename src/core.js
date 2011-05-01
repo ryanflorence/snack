@@ -9,7 +9,7 @@
   *  Zepto.js      (c) Thomas Fuchs       MIT License
 */
 
-if (typeof Object.create !== 'function'){
+if (typeof Object.create != 'function'){
   // ES5 Obeject.create
   Object.create = function (o){
     function F() {}
@@ -76,7 +76,7 @@ if (typeof Object.create !== 'function'){
 
     parseJSON: function(json) {
       // adapted from jQuery
-      if (typeof json !== 'string')
+      if (typeof json != 'string')
         return
 
       json = json.replace(/^\s+|\s+$/g, '')
@@ -93,7 +93,7 @@ if (typeof Object.create !== 'function'){
     },
 
     isArray: function (obj){
-      return toString.call(obj) === "[object Array]"
+      return toString.call(obj) == "[object Array]"
     },
 
     indexOf: [].indexOf ? function(item, array){
