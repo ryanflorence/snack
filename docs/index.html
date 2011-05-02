@@ -257,12 +257,14 @@ snack.awesome //> true, you know it
 <ol>
   <li><code>fn</code> (<b>function</b>) - The function to bind the context to.</li>
   <li><code>context</code> (<b>object</b>) - The object to become the context of the function.</li>
+  <li><code>args</code> (<b>array</b>: optional) - An array of overriding arguments to apply to the function.</li>
 </ol>
 
 <h3>Returns</h3>
 <p><b>Function</b> - The bound function.</p>
 
 <h3>Examples</h3>
+<p><i>Binding handlers to object methods</i></p>
 <pre><code>var widget = {
   node: document.getElementById('some-el'),
 

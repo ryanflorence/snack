@@ -91,6 +91,24 @@ test('indexOf', function (){
 
 })
 
+test('bind should', function (){
+  var obj = { x: 2 }
+
+  function este (){
+    return this.x
+  }
+
+  function add (y){
+    return this.x + y
+  }
+
+  var bound = snack.bind(este, obj)
+  equal(bound(), 2, 'set the context of a function to an object')
+
+  var bound = snack.bind(add, obj, [3])
+  equal(bound(), 5, 'apply new arguments if defined')
+})
+
 
 
 

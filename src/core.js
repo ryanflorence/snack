@@ -40,9 +40,9 @@ if (typeof Object.create != 'function'){
   snack.extend({
     v: '1.1.0dev',
 
-    bind: function (fn, context) {
+    bind: function (fn, context, args) {
       return function (){
-        return fn.apply(context, arguments)
+        return fn.apply(context, args || arguments)
       }
     },
 
