@@ -141,6 +141,37 @@ test('punch should', function (){
   equal(result, 4, 'should return what the new function returns')
 })
 
+test('create should', function (){
+  var obj = {
+    inheritedProp: 'foo',
+    overwrittenProp: 'foo',
+    inherited: function (){
+      return 'foo'
+    },
+    punched: function (x, y){
+      return x + y
+    }
+  }
+
+  var newObj = snack.create(obj, {
+    newProp: 'bar',
+    overwrittenProp: 'bar',
+    punched: function (old, x, y){
+      return old(x, y) * 2
+    },
+    newFn: function (){
+      return 'foo'
+    }
+  })
+
+  equal(newObj.newProp, 'bar', 'add new properties')
+  equal(newObj.overwrittenProp, 'bar', 'overwrite existing properties')
+  equal(newObj.inheritedProp, 'foo', 'inherit properties')
+
+  equal(newObj.newFn(), 'foo', 'should add new methods')
+  equal(newObj.punched(2,3), 10, 'should punch existing methods, mainting previous signature')
+  equal(newObj.inherited(), 'foo', 'should inherit methods')
+})
 
 
 

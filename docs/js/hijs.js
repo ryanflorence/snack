@@ -17,7 +17,7 @@ var keywords = ('var function if else for while break switch case do new null in
 // The key becomes the class name of the <span>
 // around the matched block of code.
 var snack = /(snack)/g
-  , snacks = ('extend bind punch id each parseJSON isArray indexOf wrap each addClass removeClass '
+  , snacks = ('extend bind punch create id each parseJSON isArray indexOf wrap each addClass removeClass '
              +'on define defineEngine ready listener attach detach fire preventDefault stopPropagation '
              +'publisher publish subscribe toQueryString JSONP send cancel request data').split(' ')
 

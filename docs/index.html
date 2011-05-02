@@ -25,6 +25,7 @@
       <li><a href="#snack.extend">snack.extend</a>
       <li><a href="#snack.bind">snack.bind</a>
       <li><a href="#snack.punch">snack.punch</a></li>
+      <li><a href="#snack.create">snack.create</a></li>
       <li><a href="#snack.id">snack.id</a>
       <li><a href="#snack.each">snack.each</a>
       <li><a href="#snack.parseJSON">snack.parseJSON</a>
@@ -357,6 +358,74 @@ widget.b //> 2 ... unchanged</code></pre>
 <h3>Notes</h3>
 <p>When using the <code>auto</code> argument, this is extremely similar to <code>dojo.connect</code> (minus the DOM events).  It's also not unlike <code>Extends</code> and <code>this.parent</code> in a MooTools class.  Think of the <code>old</code> argument as <code>this.parent</code>.</p>
 
+
+
+
+
+<h2 id=snack.create><a href="#snack.create">snack.create</a></h2>
+<p>Similar to <a href=#Object.create>Object.create</a>, except it allows for an extension object to merge into the new object. When methods are redefined in the extension object, they are automatically <a href="#snack.punch">punched</a> providing a reference to the old (or parent) method.  Useful for object templating and prototypal inheritance.</p>
+
+<h3>Signature</h3>
+<pre class=sig><code>snack.create(proto [, ext])</code></pre>
+
+<h3>Arguments</h3>
+<ol>
+  <li><code>proto</code> (<b>object</b>) - The object use as the prototype.</li>
+  <li><code>ext</code> (<b>object</b>: optional) - An object to merge into the new object. <b>Note:</b> if a method is redefined then it will be automatically <a href="#snack.punch"><code>punched</code></a>, providing as the first argument of the method the old method.  Please see the examples.</li>
+</ol>
+<h3>Returns</h3>
+<p><b>Object</b> - A new object with <code>proto</code> as its prototype and <code>ext</code> merged into it.</p>
+<h3>Examples</h3>
+<pre><code>// create a generic object
+var point = {
+  coords: {
+    x: 0,
+    y: 0
+  },
+
+  translate: function (x, y){
+    this.coords.x += x
+    this.coords.y += y
+  },
+
+  sum: function (){
+    var sum = 0
+    snack.each(this.coords, function(key, value){
+      sum += value
+    })
+    return sum
+  }
+}
+
+// create a generic object that inherits from the other
+var point3d = snack.create(point, {
+  // new property
+  z: 0,
+  // redefined method
+  translate: function (old, x, y, z){
+    // if a method exists in the prototype object
+    // then the method here is automatically punched
+    // providing the old method as the first argument
+    old()
+    this.coords.z += z
+  }
+})
+
+// create objects that inherit from the generic objects (instances, if you will)
+var p = snack.create(point)
+p.translate(5,10)
+p.coords.x //> 5
+p.coords.y //> 10
+p.sum() //> 15
+p.__proto__ === point //> true
+
+var p3d = snack.create(point3d)
+p3d.translate(1,2,3) // punched method, note that the signature does not
+                     // include the `old` argument when being called
+p.coords //> {x: 1, y: 2, z: 3}
+p.sum() //> 6, inherited
+p3d.__proto__ === point3d //> true
+</code></pre>
 
 
 

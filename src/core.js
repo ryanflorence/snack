@@ -58,6 +58,26 @@ if (typeof Object.create != 'function'){
       }
     },
 
+    create: function (proto, ext){
+      var obj = Object.create(proto)
+      if (!ext)
+        return obj
+
+      for (i in ext) {
+        if (!ext.hasOwnProperty(i))
+          continue
+
+        if (!proto[i] || typeof ext[i] != 'function'){
+          obj[i] = ext[i]
+          continue
+        }
+
+        snack.punch(obj, i, ext[i])
+      }
+
+      return obj
+    },
+
     id: function (){
       return ++guid
     },
