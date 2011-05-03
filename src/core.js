@@ -25,7 +25,7 @@ if (typeof Object.create != 'function'){
     , indexOf = Array.prototype.indexOf
 
   snack.extend = function (){
-    if (arguments.length === 1)
+    if (arguments.length == 1)
       return snack.extend(snack, arguments[0])
 
     var target = arguments[0]

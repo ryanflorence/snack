@@ -4,7 +4,7 @@
 
   snack.wrap = function (nodes, context){
     // passed in a CSS selector
-    if (typeof nodes === 'string')
+    if (typeof nodes == 'string')
       nodes = query(nodes, context)
 
     // passed in single node
@@ -25,7 +25,7 @@
 
   snack.extend(snack.wrap, {
     define: function(name, fn){
-      if (typeof name !== 'string'){
+      if (typeof name != 'string'){
         for (i in name)
           snack.wrap.define(i, name[i])
         return
@@ -40,7 +40,7 @@
 
   // QSA default selector engine, supports real browsers and IE8+
   snack.wrap.defineEngine(function (selector, context){
-    if (typeof context === 'string')
+    if (typeof context == 'string')
       context = document.querySelector(context)
 
     return (context || document).querySelectorAll(selector)

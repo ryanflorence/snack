@@ -10,7 +10,7 @@
         if (!data)
           data = storage[this.id] = {}
 
-        if (value === undefined)
+        if (value === void+1)
           return data[key]
 
         return data[key] = value

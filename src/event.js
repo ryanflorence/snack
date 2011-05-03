@@ -30,11 +30,11 @@
       handler = function (event){
         // adapted from Zepto
         var target = event.target || event.srcElement
-          , nodes = typeof params.delegate === 'string'
+          , nodes = typeof params.delegate == 'string'
             ? snack.wrap(params.delegate, params.node)
             : params.delegate(params.node)
 
-        while (target && snack.indexOf(target, nodes) === -1 )
+        while (target && snack.indexOf(target, nodes) == -1 )
           target = target.parentNode
 
         if (target && !(target === this) && !(target === document))

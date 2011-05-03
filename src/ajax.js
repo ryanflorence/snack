@@ -11,7 +11,7 @@
         callback(data)
       }
 
-      if (typeof params.data === 'object')
+      if (typeof params.data == 'object')
         params.data = snack.toQueryString(params.data)
 
     var publik = {
@@ -178,7 +178,7 @@
         , url = String(options.url)
         , method = options.method.toLowerCase()
 
-      if (typeof data !== 'string')
+      if (typeof data != 'string')
         data = snack.toQueryString(data)
 
       if (options.emulation && snack.indexOf(method, ['get', 'post']) < 0){
