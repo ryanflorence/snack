@@ -114,7 +114,7 @@ if (typeof Object.create != 'function'){
     },
 
     isArray: function (obj){
-      return toString.call(obj) == "[object Array]"
+      return obj instanceof Array || toString.call(obj) == "[object Array]"
     },
 
     indexOf: indexOf ? function(item, array){
