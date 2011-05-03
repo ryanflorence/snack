@@ -9,7 +9,8 @@
   *  Zepto.js      (c) Thomas Fuchs       MIT License
 */
 
-if (typeof Object.create !== 'function'){
+if (typeof Object.create != 'function'){
+  // ES5 Obeject.create
   Object.create = function (o){
     function F() {}
     F.prototype = o
@@ -18,13 +19,13 @@ if (typeof Object.create !== 'function'){
 }
 
 !function(window){
-
   var snack = window.snack = {}
     , guid = 0
     , toString = Object.prototype.toString
+    , indexOf = Array.prototype.indexOf
 
   snack.extend = function (){
-    if (arguments.length === 1)
+    if (arguments.length == 1)
       return snack.extend(snack, arguments[0])
 
     var target = arguments[0]
@@ -37,11 +38,11 @@ if (typeof Object.create !== 'function'){
   }
 
   snack.extend({
-    v: '1.1.0',
+    v: '1.2.0',
 
-    bind: function (fn, context) {
+    bind: function (fn, context, args) {
       return function (){
-        return fn.apply(context, arguments)
+        return fn.apply(context, args || arguments)
       }
     },
 
@@ -57,14 +58,35 @@ if (typeof Object.create !== 'function'){
       }
     },
 
+    create: function (proto, ext){
+      var obj = Object.create(proto)
+      if (!ext)
+        return obj
+
+      for (i in ext) {
+        if (!ext.hasOwnProperty(i))
+          continue
+
+        if (!proto[i] || typeof ext[i] != 'function'){
+          obj[i] = ext[i]
+          continue
+        }
+
+        snack.punch(obj, i, ext[i])
+      }
+
+      return obj
+    },
+
     id: function (){
       return ++guid
     },
 
     each: function (obj, fn, context){
-      if (obj.length === undefined){ // loose check for object, we want array-like objects to be treated as arrays
-        for (var key in obj) // no hasOwnProperty check, so watch the prototypes :P
-          fn.call(context, obj[key], key, obj);
+      if (obj.length === void+0){ // loose check for object, we want array-like objects to be treated as arrays
+        for (var key in obj)
+          if (obj.hasOwnProperty(key))
+            fn.call(context, obj[key], key, obj);
         return obj
       }
 
@@ -74,7 +96,8 @@ if (typeof Object.create !== 'function'){
     },
 
     parseJSON: function(json) {
-      if (typeof json !== 'string')
+      // adapted from jQuery
+      if (typeof json != 'string')
         return
 
       json = json.replace(/^\s+|\s+$/g, '')
@@ -91,11 +114,11 @@ if (typeof Object.create !== 'function'){
     },
 
     isArray: function (obj){
-      return toString.call(obj) === "[object Array]"
+      return obj instanceof Array || toString.call(obj) == "[object Array]"
     },
 
-    indexOf: [].indexOf ? function(item, array){
-        return [].indexOf.call(array, item)
+    indexOf: indexOf ? function(item, array){
+        return indexOf.call(array, item)
       } : function (item, array){
       for (var i = 0, l = array.length; i < l; i++)
         if (array[i] === item)
@@ -111,7 +134,7 @@ if (typeof Object.create !== 'function'){
 
   snack.wrap = function (nodes, context){
     // passed in a CSS selector
-    if (typeof nodes === 'string')
+    if (typeof nodes == 'string')
       nodes = query(nodes, context)
 
     // passed in single node
@@ -132,7 +155,7 @@ if (typeof Object.create !== 'function'){
 
   snack.extend(snack.wrap, {
     define: function(name, fn){
-      if (typeof name !== 'string'){
+      if (typeof name != 'string'){
         for (i in name)
           snack.wrap.define(i, name[i])
         return
@@ -147,7 +170,7 @@ if (typeof Object.create !== 'function'){
 
   // QSA default selector engine, supports real browsers and IE8+
   snack.wrap.defineEngine(function (selector, context){
-    if (typeof context === 'string')
+    if (typeof context == 'string')
       context = document.querySelector(context)
 
     return (context || document).querySelectorAll(selector)
@@ -183,12 +206,13 @@ if (typeof Object.create !== 'function'){
       params.capture = true
       _handler = handler
       handler = function (event){
+        // adapted from Zepto
         var target = event.target || event.srcElement
-          , nodes = typeof params.delegate === 'string'
+          , nodes = typeof params.delegate == 'string'
             ? snack.wrap(params.delegate, params.node)
             : params.delegate(params.node)
 
-        while (target && snack.indexOf(target, nodes) === -1 )
+        while (target && snack.indexOf(target, nodes) == -1 )
           target = target.parentNode
 
         if (target && !(target === this) && !(target === document))
@@ -273,7 +297,6 @@ if (typeof Object.create !== 'function'){
   window[add](prefix + 'load', init, false)
 }(snack, window, document);
 !function (snack){
-
   snack.publisher = function (obj){
     var channels = {}
     obj = obj || {}
@@ -316,255 +339,256 @@ if (typeof Object.create !== 'function'){
   }
 
   snack.publisher(snack)
-
 }(snack);
 !function(snack, window, document){
+  snack.JSONP = function(params, callback){
+    // adapted from Zepto
+    var jsonpString = 'jsonp' + snack.id()
+      , script = document.createElement('script')
+      , running = false
 
-snack.JSONP = function(params, callback){
-  var jsonpString = 'jsonp' + snack.id()
-    , script = document.createElement('script')
-    , running = false
-
-    snack.JSONP[jsonpString] = function(data){
-      running = false
-      delete snack.JSONP[jsonpString]
-      callback(data)
-    }
-
-    if (typeof params.data === 'object')
-      params.data = snack.toQueryString(params.data)
-
-  var publik = {
-    send: function (){
-      running = true
-      script.src = params.url + '?' + params.key + '=snack.JSONP.' + jsonpString + '&' + params.data
-      document.getElementsByTagName('head')[0].appendChild(script)
-    },
-
-    cancel: function (){
-      running && script.parentNode && script.parentNode.removeChild(script)
-      running = false
-      snack.JSONP[jsonpString] = function (){
+      snack.JSONP[jsonpString] = function(data){
+        running = false
         delete snack.JSONP[jsonpString]
+        callback(data)
+      }
+
+      if (typeof params.data == 'object')
+        params.data = snack.toQueryString(params.data)
+
+    var publik = {
+      send: function (){
+        running = true
+        script.src = params.url + '?' + params.key + '=snack.JSONP.' + jsonpString + '&' + params.data
+        document.getElementsByTagName('head')[0].appendChild(script)
+      },
+
+      cancel: function (){
+        running && script.parentNode && script.parentNode.removeChild(script)
+        running = false
+        snack.JSONP[jsonpString] = function (){
+          delete snack.JSONP[jsonpString]
+        }
       }
     }
+
+    if (params.now !== false)
+      publik.send()
+
+    return publik
   }
 
-  if (params.now !== false)
-    publik.send()
+  snack.toQueryString = function(object, base){
+    // adapted from MooTools
+    var queryString = []
 
-  return publik
-}
+    snack.each(object, function(value, key){
+      if (base)
+        key = base + '[' + key + ']'
 
-snack.toQueryString = function(object, base){
-  var queryString = []
+      var result
 
-  snack.each(object, function(value, key){
-    if (base)
-      key = base + '[' + key + ']'
+      switch (snack.isArray(value)){
+        case 'object':
+          result = snack.toQueryString(value, key)
+        break
+        case 'array':
+          var qs = {}
+          snack.each(value, function(val, i){
+            qs[i] = val
+          })
+          result = snack.toQueryString(qs, key)
+        break
+        default: result = key + '=' + encodeURIComponent(value)
+      }
 
-    var result
+      if (value !== null)
+        queryString.push(result)
+    })
 
-    switch (snack.isArray(value)){
-      case 'object':
-        result = snack.toQueryString(value, key)
-      break
-      case 'array':
-        var qs = {}
-        snack.each(value, function(val, i){
-          qs[i] = val
-        })
-        result = snack.toQueryString(qs, key)
-      break
-      default: result = key + '=' + encodeURIComponent(value)
+    return queryString.join('&')
+  }
+
+  var xhrObject = (function(){
+    // adapted from MooTools
+    var XMLHTTP = function(){
+      return new XMLHttpRequest();
     }
 
-    if (value !== null)
-      queryString.push(result)
-  })
+    var MSXML2 = function(){
+      return new ActiveXObject('MSXML2.XMLHTTP');
+    }
 
-  return queryString.join('&')
-}
+    var MSXML = function(){
+      return new ActiveXObject('Microsoft.XMLHTTP');
+    }
 
-var xhrObject = (function(){
-
-  var XMLHTTP = function(){
-    return new XMLHttpRequest();
-  }
-
-  var MSXML2 = function(){
-    return new ActiveXObject('MSXML2.XMLHTTP');
-  }
-
-  var MSXML = function(){
-    return new ActiveXObject('Microsoft.XMLHTTP');
-  }
-
-  try {
-    XMLHTTP()
-    return XMLHTTP
-  } catch (e){
     try {
-      MSXML2()
-      return MSXML2
+      XMLHTTP()
+      return XMLHTTP
     } catch (e){
-      MSXML()
-      return MSXML
-    }
-  }
-})();
-
-function empty(){}
-
-snack.request = function (options, callback){
-  if (!(this instanceof snack.request))
-    return new snack.request(options, callback)
-
-  var self = this
-  self.options = snack.extend({}, self.options, options)
-  self.callback = callback
-  self.xhr = new xhrObject
-  self.headers = self.options.headers
-  if (self.options.now !== false)
-    self.send()
-}
-
-snack.request.prototype = {
-
-  options: {/*
-    user: '',
-    password: '',*/
-    exception: empty,
-    url: '',
-    data: '',
-    method: 'get',
-    now: true,
-    headers: {
-      'X-Requested-With': 'XMLHttpRequest',
-      'Accept': 'text/javascript, text/html, application/xml, text/xml, */*'
-    },
-    async: true,
-    emulation: true,
-    urlEncoded: true,
-    encoding: 'utf-8'
-  },
-
-  onStateChange: function(){
-    var self = this
-      , xhr = self.xhr
-
-    if (xhr.readyState != 4 || !self.running) return
-    self.running = false
-    self.status = 0
-
-    try{
-      var status = xhr.status
-      self.status = (status == 1223) ? 204 : status
-    } catch(e) {}
-
-    xhr.onreadystatechange = empty;
-
-    var args = self.status >= 200 && self.status < 300
-      ? [false, self.xhr.responseText || '', self.xhr.responseXML]
-      : [self.status]
-
-    self.callback.apply(self, args)
-  },
-  
-  setHeader: function(name, value){
-    this.headers[name] = value;
-    return this;
-  },
-
-  getHeader: function(name){
-    try {
-      return this.xhr.getResponseHeader(name)
-    } catch(e) {
-      return null
-    }
-  },
-  
-  send: function(){
-    var self = this
-      , options = self.options
-
-    if (self.running) return self;
-
-    self.running = true;
-
-    var data = options.data || ''
-      , url = String(options.url)
-      , method = options.method.toLowerCase()
-
-    if (typeof data !== 'string')
-      data = snack.toQueryString(data)
-
-    if (options.emulation && snack.indexOf(method, ['get', 'post']) < 0){
-      var _method = '_method=' + method
-      data = (data) ? _method + '&' + data : _method
-      method = 'post'
-    }
-
-    if (options.urlEncoded && snack.indexOf(method, ['post', 'put']) > -1){
-      var encoding = (options.encoding) ? '; charset=' + options.encoding : ''
-      self.headers['Content-type'] = 'application/x-www-form-urlencoded' + encoding
-    }
-
-    if (!url)
-      url = document.location.pathname
-
-    var trimPosition = url.lastIndexOf('/')
-    if (trimPosition > -1 && (trimPosition = url.indexOf('#')) > -1)
-      url = url.substr(0, trimPosition)
-
-    if (data && method == 'get'){
-      url += (url.indexOf('?') > -1 ? '&' : '?') + data
-      data = null
-    }
-
-    var xhr = self.xhr
-
-    xhr.open(method.toUpperCase(), url, open.async, options.user, options.password)
-    if (options.user && 'withCredentials' in xhr) xhr.withCredentials = true
-    
-    xhr.onreadystatechange = snack.bind(self.onStateChange, self)
-
-    for (i in self.headers){
       try {
-        xhr.setRequestHeader(i, self.headers[i])
+        MSXML2()
+        return MSXML2
       } catch (e){
-        options.exception.apply(self, [i, self.headers[i]])
+        MSXML()
+        return MSXML
       }
     }
+  })();
 
-    xhr.send(data)
-    if (!options.async) self.onStateChange()
-    
-    return self
-  },
+  function empty(){}
 
-  cancel: function(){
+  snack.request = function (options, callback){
+    // adapted from MooTools
+    if (!(this instanceof snack.request))
+      return new snack.request(options, callback)
+
     var self = this
-
-    if (!self.running)
-      return self
-
-    self.running = false
-
-    var xhr = self.xhr
-    xhr.abort()
-
-    xhr.onreadystatechange = empty
-
-    self.xhr = new xhrObject()
-    return self
+    self.options = snack.extend({}, self.options, options)
+    self.callback = callback
+    self.xhr = new xhrObject
+    self.headers = self.options.headers
+    if (self.options.now !== false)
+      self.send()
   }
-}
 
+  snack.request.prototype = {
+
+    options: {/*
+      user: '',
+      password: '',*/
+      exception: empty,
+      url: '',
+      data: '',
+      method: 'get',
+      now: true,
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest',
+        'Accept': 'text/javascript, text/html, application/xml, text/xml, */*'
+      },
+      async: true,
+      emulation: true,
+      urlEncoded: true,
+      encoding: 'utf-8'
+    },
+
+    onStateChange: function(){
+      var self = this
+        , xhr = self.xhr
+
+      if (xhr.readyState != 4 || !self.running) return
+      self.running = false
+      self.status = 0
+
+      try{
+        var status = xhr.status
+        self.status = (status == 1223) ? 204 : status
+      } catch(e) {}
+
+      xhr.onreadystatechange = empty;
+
+      var args = self.status >= 200 && self.status < 300
+        ? [false, self.xhr.responseText || '', self.xhr.responseXML]
+        : [self.status]
+
+      self.callback.apply(self, args)
+    },
+  
+    setHeader: function(name, value){
+      this.headers[name] = value;
+      return this;
+    },
+
+    getHeader: function(name){
+      try {
+        return this.xhr.getResponseHeader(name)
+      } catch(e) {
+        return null
+      }
+    },
+  
+    send: function(){
+      var self = this
+        , options = self.options
+
+      if (self.running) return self;
+
+      self.running = true;
+
+      var data = options.data || ''
+        , url = String(options.url)
+        , method = options.method.toLowerCase()
+
+      if (typeof data != 'string')
+        data = snack.toQueryString(data)
+
+      if (options.emulation && snack.indexOf(method, ['get', 'post']) < 0){
+        var _method = '_method=' + method
+        data = (data) ? _method + '&' + data : _method
+        method = 'post'
+      }
+
+      if (options.urlEncoded && snack.indexOf(method, ['post', 'put']) > -1){
+        var encoding = (options.encoding) ? '; charset=' + options.encoding : ''
+        self.headers['Content-type'] = 'application/x-www-form-urlencoded' + encoding
+      }
+
+      if (!url)
+        url = document.location.pathname
+
+      var trimPosition = url.lastIndexOf('/')
+      if (trimPosition > -1 && (trimPosition = url.indexOf('#')) > -1)
+        url = url.substr(0, trimPosition)
+
+      if (data && method == 'get'){
+        url += (url.indexOf('?') > -1 ? '&' : '?') + data
+        data = null
+      }
+
+      var xhr = self.xhr
+
+      xhr.open(method.toUpperCase(), url, open.async, options.user, options.password)
+      if (options.user && 'withCredentials' in xhr) xhr.withCredentials = true
+    
+      xhr.onreadystatechange = snack.bind(self.onStateChange, self)
+
+      for (i in self.headers){
+        try {
+          xhr.setRequestHeader(i, self.headers[i])
+        } catch (e){
+          options.exception.apply(self, [i, self.headers[i]])
+        }
+      }
+
+      xhr.send(data)
+      if (!options.async) self.onStateChange()
+    
+      return self
+    },
+
+    cancel: function(){
+      var self = this
+
+      if (!self.running)
+        return self
+
+      self.running = false
+
+      var xhr = self.xhr
+      xhr.abort()
+
+      xhr.onreadystatechange = empty
+
+      self.xhr = new xhrObject()
+      return self
+    }
+  }
 }(snack, window, document)
 !function(snack, document){
   snack.wrap.define({
     data: function (){
+      // API inspired by jQuery
       var storage = {}
 
       return function (key, value){
@@ -573,7 +597,7 @@ snack.request.prototype = {
         if (!data)
           data = storage[this.id] = {}
 
-        if (value === undefined)
+        if (value === void+1)
           return data[key]
 
         return data[key] = value
@@ -585,6 +609,7 @@ snack.request.prototype = {
     },
   
     addClass: function (className){
+      // adapted from MooTools
       return this.each(function (element){
         if (clean(element.className).indexOf(className) > -1)
           return
@@ -593,6 +618,7 @@ snack.request.prototype = {
     },
 
     removeClass: function (className){
+      // adapted from MooTools
       return this.each(function (element){
         element.className = element.className.replace(new RegExp('(^|\\s)' + className + '(?:\\s|$)'), '$1')
       })
@@ -1280,42 +1306,49 @@ var Expr = Sizzle.selectors = {
 			var attr = elem.getAttribute( "type" ), type = elem.type;
 			// IE6 and 7 will map elem.type to 'text' for new HTML5 types (search, etc) 
 			// use getAttribute instead to test this case
-			return "text" === type && ( attr === type || attr === null );
+			return elem.nodeName.toLowerCase() === "input" && "text" === type && ( attr === type || attr === null );
 		},
 
 		radio: function( elem ) {
-			return "radio" === elem.type;
+			return elem.nodeName.toLowerCase() === "input" && "radio" === elem.type;
 		},
 
 		checkbox: function( elem ) {
-			return "checkbox" === elem.type;
+			return elem.nodeName.toLowerCase() === "input" && "checkbox" === elem.type;
 		},
 
 		file: function( elem ) {
-			return "file" === elem.type;
+			return elem.nodeName.toLowerCase() === "input" && "file" === elem.type;
 		},
+
 		password: function( elem ) {
-			return "password" === elem.type;
+			return elem.nodeName.toLowerCase() === "input" && "password" === elem.type;
 		},
 
 		submit: function( elem ) {
-			return "submit" === elem.type;
+			var name = elem.nodeName.toLowerCase();
+			return (name === "input" || name === "button") && "submit" === elem.type;
 		},
 
 		image: function( elem ) {
-			return "image" === elem.type;
+			return elem.nodeName.toLowerCase() === "input" && "image" === elem.type;
 		},
 
 		reset: function( elem ) {
-			return "reset" === elem.type;
+			return elem.nodeName.toLowerCase() === "input" && "reset" === elem.type;
 		},
 
 		button: function( elem ) {
-			return "button" === elem.type || elem.nodeName.toLowerCase() === "button";
+			var name = elem.nodeName.toLowerCase();
+			return name === "input" && "button" === elem.type || name === "button";
 		},
 
 		input: function( elem ) {
 			return (/input|select|textarea|button/i).test( elem.nodeName );
+		},
+
+		focus: function( elem ) {
+			return elem === elem.ownerDocument.activeElement;
 		}
 	},
 	setFilters: {
@@ -2054,7 +2087,7 @@ window.Sizzle = Sizzle;
 
 })();
 snack.wrap.defineEngine(function (selector, context){
-  if (typeof context === 'string')
+  if (typeof context == 'string')
     context = Sizzle(context)[0]
   return Sizzle(selector, context)
 })
