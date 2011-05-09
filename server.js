@@ -4,10 +4,10 @@ var express = require('express')
   , fs = require('fs');
 
 app.configure(function(){
-  app.use(express.bodyDecoder())
+  app.use(express.bodyParser())
   app.use(express.methodOverride())
   app.use(app.router)
-  app.use(express.staticProvider(__dirname))
+  app.use(express.static(__dirname))
 })
 
 app.get('/echo', function(req, res){

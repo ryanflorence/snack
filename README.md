@@ -8,7 +8,7 @@ Features
 
 ### Tiny!
 
-- ~3.3kb! (minified, gzipped, can't even see it when it turns to the side)
+- ~3.4kb! (minified, gzipped)
 
 ### Elements
 
@@ -58,15 +58,17 @@ From the root of the repository:
 
 ### Tests
 
-The tests require [node](http://nodejs.org/) and [express](http://expressjs.com/) to be installed (and submodules to be 
-updated, see above).  To run the tests fire up the server (used for all
+The tests require [node](http://nodejs.org/) >= 0.4.6, [npm](http://npmjs.org) >= 1.0.0, and submodules to be updated (see above).
+
+To run the tests, install dependencies and fire up the server (used for all
 the ajax stuff).
 
+    $ npm install .
     $ node server.js
 
 ### Building
 
-Building snack requires [uglifyjs](https://github.com/mishoo/UglifyJS).
+Build snack like so:
 
     $ ./build
 

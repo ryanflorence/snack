@@ -1,0 +1,15 @@
+{
+  "name": "SnackJS",
+  "version": "1.2.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rpflorence/snack.git"
+  },
+  "engines": {
+    "node": "*"
+  },
+  "dependencies": {
+    "express": ">= 2.3.3",
+    "uglify-js": "*"
+  }
+}
