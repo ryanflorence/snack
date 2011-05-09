@@ -30,7 +30,7 @@ if (typeof Object.create != 'function'){
 
     var target = arguments[0]
 
-    for (var i = 1, l = arguments.length; i < l; i++)
+    for (var key, i = 1, l = arguments.length; i < l; i++)
       for (key in arguments[i])
         target[key] = arguments[i][key]
 
@@ -38,7 +38,7 @@ if (typeof Object.create != 'function'){
   }
 
   snack.extend({
-    v: '1.2.0',
+    v: '1.2.1',
 
     bind: function (fn, context, args) {
       return function (){
