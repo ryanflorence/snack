@@ -30,8 +30,8 @@ if (typeof Object.create != 'function'){
 
     var target = arguments[0]
 
-    for (var i = 1, l = arguments.length; i < l; i++)
-      for (var key in arguments[i])
+    for (var key, i = 1, l = arguments.length; i < l; i++)
+      for (key in arguments[i])
         target[key] = arguments[i][key]
 
     return target
