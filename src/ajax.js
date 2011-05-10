@@ -211,7 +211,7 @@
     
       xhr.onreadystatechange = snack.bind(self.onStateChange, self)
 
-      for (i in self.headers){
+      for (var i in self.headers){
         try {
           xhr.setRequestHeader(i, self.headers[i])
         } catch (e){

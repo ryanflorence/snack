@@ -63,7 +63,7 @@ if (typeof Object.create != 'function'){
       if (!ext)
         return obj
 
-      for (i in ext) {
+      for (var i in ext) {
         if (!ext.hasOwnProperty(i))
           continue
 

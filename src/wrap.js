@@ -26,7 +26,7 @@
   snack.extend(snack.wrap, {
     define: function(name, fn){
       if (typeof name != 'string'){
-        for (i in name)
+        for (var i in name)
           snack.wrap.define(i, name[i])
         return
       }
