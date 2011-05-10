@@ -38,7 +38,7 @@ if (typeof Object.create != 'function'){
   }
 
   snack.extend({
-    v: '1.2.1',
+    v: '1.2.2',
 
     bind: function (fn, context, args) {
       return function (){
@@ -63,7 +63,7 @@ if (typeof Object.create != 'function'){
       if (!ext)
         return obj
 
-      for (i in ext) {
+      for (var i in ext) {
         if (!ext.hasOwnProperty(i))
           continue
 
@@ -156,7 +156,7 @@ if (typeof Object.create != 'function'){
   snack.extend(snack.wrap, {
     define: function(name, fn){
       if (typeof name != 'string'){
-        for (i in name)
+        for (var i in name)
           snack.wrap.define(i, name[i])
         return
       }
@@ -553,7 +553,7 @@ if (typeof Object.create != 'function'){
     
       xhr.onreadystatechange = snack.bind(self.onStateChange, self)
 
-      for (i in self.headers){
+      for (var i in self.headers){
         try {
           xhr.setRequestHeader(i, self.headers[i])
         } catch (e){
