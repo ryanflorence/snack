@@ -41,8 +41,10 @@ if (typeof Object.create != 'function'){
     v: '1.2.2',
 
     bind: function (fn, context, args) {
+      args = args || [];
       return function (){
-        return fn.apply(context, args || arguments)
+        args.push.apply(args, arguments);
+        return fn.apply(context, args)
       }
     },
 
