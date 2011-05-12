@@ -107,6 +107,16 @@ test('bind should', function (){
 
   var bound = snack.bind(add, obj, [3])
   equal(bound(), 5, 'apply new arguments if defined')
+
+  function toBind() {
+    return 'args: ' + [].slice.call(arguments)
+  }
+  var bound = snack.bind(toBind, {}, ['a', 'b', 'c']);
+
+  equal(bound(), 'args: a,b,c')
+  bound(); // "args: a,b,c" - same in both versions
+  bound('d'); // "args: a,b,c,d" - would previously return "args: a,b,c"
+
 })
 
 

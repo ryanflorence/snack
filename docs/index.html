@@ -258,7 +258,7 @@ snack.awesome //> true, you know it
 <ol>
   <li><code>fn</code> (<b>function</b>) - The function to bind the context to.</li>
   <li><code>context</code> (<b>object</b>) - The object to become the context of the function.</li>
-  <li><code>args</code> (<b>array</b>: optional) - An array of overriding arguments to apply to the function.</li>
+  <li><code>args</code> (<b>array</b>: optional) - An array of arguments to prepend to the existing arguments of the function.</li>
 </ol>
 
 <h3>Returns</h3>
@@ -272,12 +272,13 @@ snack.awesome //> true, you know it
   init: function (){
     this.listener = snack.listener(
       {node: this.node},
-      snack.bind(this.handler, this) // here!
+      snack.bind(this.handler, this, ['foo', 'bar']) // here!
     )
   },
 
-  handler: function (){
+  handler: function (foo, bar, event){
     // `this` is `widget`, instead of `node` (default context)
+    // foo and bar are added before event
   }
 }
 </code></pre>

@@ -22,7 +22,8 @@ if (typeof Object.create != 'function'){
   var snack = window.snack = {}
     , guid = 0
     , toString = Object.prototype.toString
-    , indexOf = Array.prototype.indexOf
+    , indexOf = [].indexOf
+    , push = [].push
 
   snack.extend = function (){
     if (arguments.length == 1)
@@ -43,7 +44,7 @@ if (typeof Object.create != 'function'){
     bind: function (fn, context, args) {
       args = args || [];
       return function (){
-        args.push.apply(args, arguments);
+        push.apply(args, arguments);
         return fn.apply(context, args)
       }
     },
