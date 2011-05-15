@@ -113,6 +113,7 @@
 
 
 <div id=docs>
+<section id=about>
 <h2 id=about-snack><a href="#about-snack">About Snack</a></h2>
 <h1 id=snack>Snack API Documentation</h1>
 <h3>Because sometimes, all you need is a snack.</h3>
@@ -122,6 +123,12 @@
 <p>
   This documentation is released under the <a href="http://creativecommons.org/licenses/by-nc-sa/3.0/">Creative Commons - Attribution-NonCommercial-ShareAlike license.</a> 
 </p>
+</section>
+
+
+
+
+
 
 <section id=core>
 <h1><a href="#core">core</a></h1>
@@ -252,7 +259,7 @@ snack.awesome //> true, you know it
 <p>Binds the context of a function (<code>this</code>) to an object.</p>
 
 <h3>Signature</h3>
-<pre class=sig><code>snack.bind(fn, context)</code></pre>
+<pre class=sig><code>snack.bind(fn [, context [, args]])</code></pre>
 
 <h3>Arguments</h3>
 <ol>
@@ -1093,7 +1100,6 @@ listener.attach()
 
 listener.fire({keyCode: 'fake'})
 </code></pre>
-</section>
 
 
 
@@ -1142,6 +1148,7 @@ listener.fire({keyCode: 'fake'})
 </code></pre>
 <h3>Notes</h3>
 <p>See <a href="https://developer.mozilla.org/en/DOM/event.stopPropagation">MDC event.stopPropagation</a></p>
+</section>
 
 
 
