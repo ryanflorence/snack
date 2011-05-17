@@ -46,19 +46,17 @@
 
       var result
 
-      switch (snack.isArray(value)){
-        case 'object':
-          result = snack.toQueryString(value, key)
-        break
-        case 'array':
-          var qs = {}
-          snack.each(value, function(val, i){
-            qs[i] = val
-          })
-          result = snack.toQueryString(qs, key)
-        break
-        default: result = key + '=' + encodeURIComponent(value)
+      if (snack.isArray(value)){
+        var qs = {}
+        snack.each(value, function(val, i){
+          qs[i] = val
+        })
+        result = snack.toQueryString(qs, key)
       }
+      else if (typeof value == 'object')
+        result = snack.toQueryString(value, key)
+      else
+        result = key + '=' + encodeURIComponent(value)
 
       if (value !== null)
         queryString.push(result)
