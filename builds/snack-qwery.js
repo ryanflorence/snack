@@ -39,7 +39,7 @@ if (typeof Object.create != 'function'){
   }
 
   snack.extend({
-    v: '1.2.2',
+    v: '1.2.3',
 
     bind: function (fn, context, args) {
       args = args || [];
@@ -391,19 +391,17 @@ if (typeof Object.create != 'function'){
 
       var result
 
-      switch (snack.isArray(value)){
-        case 'object':
-          result = snack.toQueryString(value, key)
-        break
-        case 'array':
-          var qs = {}
-          snack.each(value, function(val, i){
-            qs[i] = val
-          })
-          result = snack.toQueryString(qs, key)
-        break
-        default: result = key + '=' + encodeURIComponent(value)
+      if (snack.isArray(value)){
+        var qs = {}
+        snack.each(value, function(val, i){
+          qs[i] = val
+        })
+        result = snack.toQueryString(qs, key)
       }
+      else if (typeof value == 'object')
+        result = snack.toQueryString(value, key)
+      else
+        result = key + '=' + encodeURIComponent(value)
 
       if (value !== null)
         queryString.push(result)
@@ -658,8 +656,8 @@ if (typeof Object.create != 'function'){
       return this
     },
 
-    fire: function (namespace, arguments){
-      return listenerMethod(this, 'fire', namespace, arguments)
+    fire: function (namespace, args){
+      return listenerMethod(this, 'fire', namespace, args)
     },
 
     delegate: function (event, delegation, handler){
@@ -671,27 +669,28 @@ if (typeof Object.create != 'function'){
     return str.replace(/\s+/g, ' ').replace(/^\s+|\s+$/g, '')
   }
 
-  function listenerMethod(wrapper, method, namespace, arguments){
+  function listenerMethod(wrapper, method, namespace, args){
     var data = wrapper.data(namespace)
 
     if (data)
       snack.each(data, function (listener){
-        listener[method].apply(wrapper, arguments)
+        listener[method].apply(wrapper, args)
       })
 
     return wrapper
   }
 }(snack, document);
 /*!
-  * qwery.js - copyright @dedfat
+  * Qwery - A Blazing Fast query selector engine
   * https://github.com/ded/qwery
-  * Follow our software http://twitter.com/dedfat
+  * copyright Dustin Diaz & Jacob Thornton 2011
   * MIT License
   */
+
 !function (context, doc) {
 
   var c, i, j, k, l, m, o, p, r, v,
-      el, node, len, found, classes, item, items, token, collection,
+      el, node, len, found, classes, item, items, token,
       id = /#([\w\-]+)/,
       clas = /\.[\w\-]+/g,
       idOnly = /^#([\w\-]+$)/,
@@ -699,22 +698,35 @@ if (typeof Object.create != 'function'){
       tagOnly = /^([\w\-]+)$/,
       tagAndOrClass = /^([\w]+)?\.([\w\-]+)$/,
       html = doc.documentElement,
-      tokenizr = /\s(?![\s\w\-\/\?\&\=\:\.\(\)\!,@#%<>\{\}\$\*\^'"]*\])/,
+      normalizr = /\s*([\s\+\~>])\s*/g,
+      tokenizr = /([\s\>\+\~])(?![\s\w\-\/\?\&\=\:\.\(\)\!,@#%<>\{\}\$\*\^'"]*\])/,
+      specialChars = /([.*+?\^=!:${}()|\[\]\/\\])/g,
       simple = /^([a-z0-9]+)?(?:([\.\#]+[\w\-\.#]+)?)/,
       attr = /\[([\w\-]+)(?:([\|\^\$\*\~]?\=)['"]?([ \w\-\/\?\&\=\:\.\(\)\!,@#%<>\{\}\$\*\^]+)["']?)?\]/,
-      chunker = new RegExp(simple.source + '(' + attr.source + ')?');
-
-  function array(ar) {
-    r = [];
-    for (i = 0, len = ar.length; i < len; i++) {
-      r[i] = ar[i];
+      chunker = new RegExp(simple.source + '(' + attr.source + ')?'),
+      walker = {
+    ' ': function (node) {
+      return node && node !== html && node.parentNode
+    },
+    '>': function (node, contestant) {
+      return node && node.parentNode == contestant.parentNode && node.parentNode;
+    },
+    '~': function (node) {
+      return node && node.previousSibling;
+    },
+    '+': function (node, contestant, p1, p2) {
+      if (!node) {
+        return false;
+      }
+      p1 = previous(node);
+      p2 = previous(contestant);
+      return p1 && p2 && p1 == p2 && p1;
     }
-    return r;
-  }
-
-  var cache = function () {
-    this.c = {};
   };
+
+  function cache() {
+    this.c = {};
+  }
   cache.prototype = {
     g: function (k) {
       return this.c[k] || undefined;
@@ -729,6 +741,23 @@ if (typeof Object.create != 'function'){
       cleanCache = new cache(),
       attrCache = new cache(),
       tokenCache = new cache();
+
+  function array(ar) {
+    r = [];
+    for (i = 0, len = ar.length; i < len; i++) {
+      r[i] = ar[i];
+    }
+    return r;
+  }
+
+  function previous(n) {
+    while (n = n.previousSibling) {
+      if (n.nodeType == 1) {
+        break;
+      }
+    }
+    return n
+  }
 
   function q(query) {
     return query.match(chunker);
@@ -764,24 +793,8 @@ if (typeof Object.create != 'function'){
     return this;
   }
 
-  function loopAll(tokens) {
-    var r = [], token = tokens.pop(), intr = q(token), tag = intr[1] || '*', i, l, els,
-        root = tokens.length && (m = tokens[0].match(idOnly)) ? doc.getElementById(m[1]) : doc;
-    if (!root) {
-      return r;
-    }
-    els = root.getElementsByTagName(tag);
-    for (i = 0, l = els.length; i < l; i++) {
-      el = els[i];
-      if (item = interpret.apply(el, intr)) {
-        r.push(item);
-      }
-    }
-    return r;
-  }
-
   function clean(s) {
-    return cleanCache.g(s) || cleanCache.s(s, s.replace(/([.*+?\^=!:${}()|\[\]\/\\])/g, '\\$1'));
+    return cleanCache.g(s) || cleanCache.s(s, s.replace(specialChars, '\\$1'));
   }
 
   function checkAttr(qualify, actual, val) {
@@ -799,58 +812,63 @@ if (typeof Object.create != 'function'){
     case '|=':
       return actual.match(attrCache.g('|=' + val) || attrCache.s('|=' + val, new RegExp('^' + clean(val) + '(-|$)')));
     }
-    return false;
+    return 0;
   }
 
   function _qwery(selector) {
-    var r = [], ret = [], i, l,
+    var r = [], ret = [], i, j = 0, k, l, m, p, token, tag, els, root, intr, item,
         tokens = tokenCache.g(selector) || tokenCache.s(selector, selector.split(tokenizr));
-    tokens = tokens.slice(0);
+    tokens = tokens.slice(0); // this makes a copy of the array so the cached original is not effected
+
     if (!tokens.length) {
       return r;
     }
-    r = loopAll(tokens);
+
+    token = tokens.pop();
+    root = tokens.length && (m = tokens[tokens.length - 2].match(idOnly)) ? doc.getElementById(m[1]) : doc;
+    if (!root) {
+      return r;
+    }
+    intr = q(token);
+    els = /^[+~]$/.test(tokens[tokens.length - 1]) ? function (r) {
+        r = []
+        while (root = root.nextSibling) {
+          root.nodeType == 1 && (intr[1] ? intr[1] == root.tagName.toLowerCase() : 1) && r.push(root)
+        }
+        return r
+      }() :
+      root.getElementsByTagName(intr[1] || '*');
+    for (i = 0, l = els.length; i < l; i++) {
+      if (item = interpret.apply(els[i], intr)) {
+        r[j++] = item;
+      }
+    }
+
     if (!tokens.length) {
       return r;
     }
+
     // loop through all descendent tokens
     for (j = 0, l = r.length, k = 0; j < l; j++) {
-      node = r[j];
-      p = node;
-      // loop through each token
-      for (i = tokens.length; i--;) {
-        z: // loop through parent nodes
-        while (p !== html && (p = p.parentNode)) {
+      p = r[j];
+      // loop through each token backwards crawling up tree
+      for (i = tokens.length - 2; i >= 0;i = i - 2) {
+        // loop through parent nodes
+        while (p = walker[tokens[i + 1]](p, r[j])) {
           if (found = interpret.apply(p, q(tokens[i]))) {
-            break z;
+            break;
           }
         }
       }
-      found && (ret[k++] = node);
+      found && (ret[k++] = r[j]);
     }
     return ret;
   }
 
-  var isAncestor = 'compareDocumentPosition' in html ?
-    function (element, container) {
-      return (container.compareDocumentPosition(element) & 16) == 16;
-    } : 'contains' in html ?
-    function (element, container) {
-      return container !== element && container.contains(element);
-    } :
-    function (element, container) {
-      while (element = element.parentNode) {
-        if (element === container) {
-          return 1;
-        }
-      }
-      return 0;
-    };
-
   function boilerPlate(selector, _root, fn) {
     var root = (typeof _root == 'string') ? fn(_root)[0] : (_root || doc);
-    if (isNode(selector)) {
-      return !_root || (isNode(root) && isAncestor(selector, root)) ? [selector] : [];
+    if (selector === window || isNode(selector)) {
+      return !_root || (selector !== window && isNode(root) && isAncestor(selector, root)) ? [selector] : [];
     }
     if (selector && typeof selector === 'object' && isFinite(selector.length)) {
       return array(selector);
@@ -865,21 +883,7 @@ if (typeof Object.create != 'function'){
   }
 
   function isNode(el) {
-    return (el === window || el && el.nodeType && el.nodeType.toString().match(/[19]/));
-  }
-
-  function qsa(selector, _root) {
-    var root = (typeof _root == 'string') ? qsa(_root)[0] : (_root || doc);
-    if (!root || !selector) {
-      return [];
-    }
-    if (m = boilerPlate(selector, _root, qsa)) {
-      return m;
-    }
-    if (doc.getElementsByClassName && (m = selector.match(classOnly))) {
-      return array((root).getElementsByClassName(m[1]));
-    }
-    return array((root).querySelectorAll(selector));
+    return (el && el.nodeType && (el.nodeType == 1 || el.nodeType == 9));
   }
 
   function uniq(ar) {
@@ -896,20 +900,44 @@ if (typeof Object.create != 'function'){
     return a;
   }
 
-  var qwery = function () {
-    // return fast. boosh.
-    if (doc.querySelector && doc.querySelectorAll) {
-      return qsa;
+  function qwery(selector, _root) {
+    var root = (typeof _root == 'string') ? qwery(_root)[0] : (_root || doc);
+    if (!root || !selector) {
+      return [];
     }
-    return function (selector, _root) {
-      var root = (typeof _root == 'string') ? qwery(_root)[0] : (_root || doc);
-      if (!root || !selector) {
-        return [];
+    if (m = boilerPlate(selector, _root, qwery)) {
+      return m;
+    }
+    return select(selector, root);
+  }
+
+  var isAncestor = 'compareDocumentPosition' in html ?
+    function (element, container) {
+      return (container.compareDocumentPosition(element) & 16) == 16;
+    } : 'contains' in html ?
+    function (element, container) {
+      container = container == doc || container == window ? html : container;
+      return container !== element && container.contains(element);
+    } :
+    function (element, container) {
+      while (element = element.parentNode) {
+        if (element === container) {
+          return 1;
+        }
       }
-      var i, l, result = [], collections = [], element;
-      if (m = boilerPlate(selector, _root, qwery)) {
-        return m;
+      return 0;
+    },
+
+  select = (doc.querySelector && doc.querySelectorAll) ?
+    function (selector, root) {
+      if (doc.getElementsByClassName && (m = selector.match(classOnly))) {
+        return array((root).getElementsByClassName(m[1]));
       }
+      return array((root).querySelectorAll(selector));
+    } :
+    function (selector, root) {
+      selector = selector.replace(normalizr, '$1');
+      var result = [], collection, collections = [], i;
       if (m = selector.match(tagAndOrClass)) {
         items = root.getElementsByTagName(m[1] || '*');
         r = classCache.g(m[2]) || classCache.s(m[2], new RegExp('(^|\\s+)' + m[2] + '(\\s+|$)'));
@@ -934,7 +962,6 @@ if (typeof Object.create != 'function'){
       }
       return uniq(result);
     };
-  }();
 
   qwery.uniq = uniq;
   var oldQwery = context.qwery;
@@ -942,10 +969,9 @@ if (typeof Object.create != 'function'){
     context.qwery = oldQwery;
     return this;
   };
-  context.qwery = qwery;
+  context['qwery'] = qwery;
 
-}(this, document);
-snack.qwery = qwery.noConflict()
+}(this, document);snack.qwery = qwery.noConflict()
 snack.wrap.defineEngine(function (selector, context){
   return snack.qwery(selector, context);
 })

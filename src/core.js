@@ -39,7 +39,7 @@ if (typeof Object.create != 'function'){
   }
 
   snack.extend({
-    v: '1.2.3dev',
+    v: '1.2.4dev',
 
     bind: function (fn, context, args) {
       args = args || [];

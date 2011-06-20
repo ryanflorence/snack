@@ -68,8 +68,8 @@
       return this
     },
 
-    fire: function (namespace, arguments){
-      return listenerMethod(this, 'fire', namespace, arguments)
+    fire: function (namespace, args){
+      return listenerMethod(this, 'fire', namespace, args)
     },
 
     delegate: function (event, delegation, handler){
@@ -81,12 +81,12 @@
     return str.replace(/\s+/g, ' ').replace(/^\s+|\s+$/g, '')
   }
 
-  function listenerMethod(wrapper, method, namespace, arguments){
+  function listenerMethod(wrapper, method, namespace, args){
     var data = wrapper.data(namespace)
 
     if (data)
       snack.each(data, function (listener){
-        listener[method].apply(wrapper, arguments)
+        listener[method].apply(wrapper, args)
       })
 
     return wrapper

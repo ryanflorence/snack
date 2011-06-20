@@ -39,7 +39,7 @@ if (typeof Object.create != 'function'){
   }
 
   snack.extend({
-    v: '1.2.2',
+    v: '1.2.3',
 
     bind: function (fn, context, args) {
       args = args || [];
@@ -391,19 +391,17 @@ if (typeof Object.create != 'function'){
 
       var result
 
-      switch (snack.isArray(value)){
-        case 'object':
-          result = snack.toQueryString(value, key)
-        break
-        case 'array':
-          var qs = {}
-          snack.each(value, function(val, i){
-            qs[i] = val
-          })
-          result = snack.toQueryString(qs, key)
-        break
-        default: result = key + '=' + encodeURIComponent(value)
+      if (snack.isArray(value)){
+        var qs = {}
+        snack.each(value, function(val, i){
+          qs[i] = val
+        })
+        result = snack.toQueryString(qs, key)
       }
+      else if (typeof value == 'object')
+        result = snack.toQueryString(value, key)
+      else
+        result = key + '=' + encodeURIComponent(value)
 
       if (value !== null)
         queryString.push(result)
@@ -658,8 +656,8 @@ if (typeof Object.create != 'function'){
       return this
     },
 
-    fire: function (namespace, arguments){
-      return listenerMethod(this, 'fire', namespace, arguments)
+    fire: function (namespace, args){
+      return listenerMethod(this, 'fire', namespace, args)
     },
 
     delegate: function (event, delegation, handler){
@@ -671,12 +669,12 @@ if (typeof Object.create != 'function'){
     return str.replace(/\s+/g, ' ').replace(/^\s+|\s+$/g, '')
   }
 
-  function listenerMethod(wrapper, method, namespace, arguments){
+  function listenerMethod(wrapper, method, namespace, args){
     var data = wrapper.data(namespace)
 
     if (data)
       snack.each(data, function (listener){
-        listener[method].apply(wrapper, arguments)
+        listener[method].apply(wrapper, args)
       })
 
     return wrapper
