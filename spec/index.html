@@ -1,0 +1,43 @@
+<!doctype html>
+<html>
+<head>
+  <meta http-equiv=Content-type content="text/html; charset=utf-8">
+  <title>SnackJS Tests</title>
+  <link rel="stylesheet" href="../vendor/qunit/qunit.css" type="text/css">
+</head>
+<body>
+  <h1 id="qunit-header">QUnit Test Suite</h1>
+  <h2 id="qunit-banner"></h2>
+  <div id="qunit-testrunner-toolbar"></div>
+  <h2 id="qunit-userAgent"></h2>
+  <ol id="qunit-tests"></ol>
+
+  <div id="fixtures"></div>
+
+  <script src="../vendor/qunit/qunit.js"></script>
+  <script>
+    var require = {
+      urlArgs: "bust=" + new Date().getTime(),
+      baseUrl: '../transpiled/lib',
+      packages: [
+        {
+          name: 'spec',
+          location: '../spec/tests',
+          main: 'all'
+        },
+        {
+          name: 'helpers',
+          location: '../spec/helpers',
+        }
+      ]
+    };
+  </script>
+  <script src="../vendor/require.js"></script>
+  <script>
+    require(['spec']);
+  </script>
+
+</body>
+</html>
+
+

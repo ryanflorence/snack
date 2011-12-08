@@ -1,0 +1,13 @@
+#!/bin/sh
+
+# remove old stuff
+rm -rf transpiled
+
+# transpile source
+coffee -o transpiled/lib -cb lib/
+
+# transpile specs
+coffee -o transpiled/spec -cb spec/
+
+./bin/generate_all_specs
+

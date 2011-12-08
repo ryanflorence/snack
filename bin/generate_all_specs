@@ -1,0 +1,46 @@
+#!/usr/bin/env node
+
+var fs = require('fs');
+
+var walk = function (dir, done) {
+  var results = [];
+  fs.readdir(dir, function(err, list) {
+    if (err) return done(err);
+    var pending = list.length;
+    if (!pending) return done(null, results);
+    list.forEach(function(file) {
+      file = dir + '/' + file;
+      fs.stat(file, function(err, stat) {
+        if (stat && stat.isDirectory()) {
+          walk(file, function(err, res) {
+            results = results.concat(res);
+            if (!--pending) done(null, results);
+          });
+        } else {
+          results.push(file);
+          if (!--pending) done(null, results);
+        }
+      });
+    });
+  });
+};
+
+var specDir = __dirname + '/../spec/tests';
+var specs = [];
+
+walk(specDir, function (err, results) {
+  if (err) throw new Error(err);
+  results.forEach(function (file) {
+    var moduleName = file.replace(specDir + '/', '').replace(/\.coffee$/, '');
+    var specName = 'spec/' + moduleName;
+    specs.push("  '" + specName + "'");
+  });
+});
+
+process.on('exit', function () {
+  src = 'require([\n';
+  src += specs.join(',\n');
+  src += '\n]);\n';
+  fs.writeFileSync(__dirname + '/../transpiled/spec/tests/all.js', src);
+});
+
