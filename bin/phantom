@@ -1,0 +1,3 @@
+#!/bin/sh
+phantomjs bin/ci_tests.js spec/index.html
+
