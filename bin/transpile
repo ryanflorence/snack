@@ -1,13 +1,14 @@
 #!/bin/sh
 
-# remove old stuff
+echo "# removing transpiled/"
 rm -rf transpiled
 
-# transpile source
+echo "# transpiling source"
 coffee -o transpiled/lib -cb lib/
 
-# transpile specs
+echo "# transpiling specs"
 coffee -o transpiled/spec -cb spec/
 
+echo "# creating spec bootstrapper"
 ./bin/generate_all_specs
 

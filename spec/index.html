@@ -34,7 +34,10 @@
   </script>
   <script src="../vendor/require.js"></script>
   <script>
-    require(['spec']);
+    stop();
+    require(['spec'], function () {
+      start();
+    });
   </script>
 
 </body>

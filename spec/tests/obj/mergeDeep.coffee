@@ -1,5 +1,4 @@
 define ['obj/mergeDeep'], (mergeDeep) ->
-
   module 'obj/mergeDeep'
 
   test 'target object is returned and extended', ->

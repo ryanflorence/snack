@@ -1,3 +1,4 @@
 #!/bin/sh
+transpile
 phantomjs bin/ci_tests.js spec/index.html
 

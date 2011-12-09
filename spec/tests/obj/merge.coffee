@@ -1,5 +1,4 @@
 define ['obj/merge'], (merge) ->
-
   module 'obj/merge'
 
   test 'target object is returned and extended', ->
