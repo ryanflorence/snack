@@ -8,28 +8,23 @@ define ['util/typeOf'], (typeOf) ->
     type = typeOf list
 
     if type is 'array'
-      return (
-        for item, i in list when list[i]
-          iterator.call context, item, i, list
-      )
+      (iterator.call context, item, i, list for item, i in list when list[i])
 
-    if type is 'object'
+    else if type is 'object'
       results = {}
       for own key, val of list
         results[key] = iterator.call context, val, key, list
-      return results
+      results
 
-    if type is 'arraylike'
+    else if type is 'arraylike'
       results = length: list.length
       for item, i in list when list[i]
         results[i] = iterator.call context, item, i, list
-      return results
+      results
 
-    if type is 'string'
-      return (
-        for item, i in list
-          iterator.call context, item, i, list
-      ).join('')
+    else if type is 'string'
+      (iterator.call context, item, i, list for item, i in list).join('')
 
-    list
+    else
+      list
 
