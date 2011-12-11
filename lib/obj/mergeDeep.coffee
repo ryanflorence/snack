@@ -1,8 +1,9 @@
 define ['util/typeOf'], (typeOf) ->
+  deepTypes = ['object', 'array']
 
   merge = (target, extension) ->
     for own prop of extension
-      if typeOf(extension[prop]) in ['object', 'array']
+      if typeOf(extension[prop]) in deepTypes
         mergeDeep target[prop], extension[prop]
       else
         target[prop] = extension[prop]
