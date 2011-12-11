@@ -2,7 +2,6 @@
 define ->
   (target, extensions...) ->
     for ext in extensions
-      for prop of ext when ext.hasOwnProperty(prop)
-        target[prop] = ext[prop]
+      target[prop] = ext[prop] for own prop of ext
     target
 
