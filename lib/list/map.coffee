@@ -7,8 +7,7 @@ define ['util/typeOf'], (typeOf) ->
   (list, iterator, context = list) ->
     switch typeOf list
       when 'array'
-        for item, i in list when list[i]
-          iterator.call context, item, i, list
+        iterator.call context, item, i, list for item, i in list
 
       when 'object'
         results = {}
