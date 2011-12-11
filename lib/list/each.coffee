@@ -12,7 +12,7 @@ define ['util/typeOf'], (typeOf) ->
         iterator.call context, item, i, list
 
     if type is 'object'
-      for key, val of list when list.hasOwnProperty key
+      for own key, val of list
         iterator.call context, val, key, list
 
     list
