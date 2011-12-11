@@ -8,12 +8,10 @@ define ['util/typeOf'], (typeOf) ->
     type = typeOf list
 
     if type in arylike
-      for item, i in list when list[i]
-        iterator.call context, item, i, list
+      iterator.call context, item, i, list for item, i in list when list[i]
 
     if type is 'object'
-      for own key, val of list
-        iterator.call context, val, key, list
+      iterator.call context, val, key, list for own key, val of list
 
     list
 
