@@ -1,5 +1,5 @@
-SnackJS AMD-CofeeScript [WIP]
-=============================
+SnackJS AMD-CoffeeScript [WIP]
+==============================
 
 Experimental branch of SnackJS: AMD modules written in CoffeeScript.
 
