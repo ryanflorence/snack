@@ -9,7 +9,7 @@ define ['util/typeOf'], (typeOf) ->
         target[prop] = extension[prop]
 
   # Deep merge of `extensions` into `target`
-  mergeDeep = (target = {}, extensions...) ->
+  mergeDeep = (target, extensions...) ->
     merge target, extension for own extension in extensions
     target
 
