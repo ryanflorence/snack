@@ -31,6 +31,7 @@ var specs = [];
 walk(specDir, function (err, results) {
   if (err) throw new Error(err);
   results.forEach(function (file) {
+    if (file.indexOf('.DS_Store') > -1) return;
     var moduleName = file.replace(specDir + '/', '').replace(/\.coffee$/, '');
     var specName = 'spec/' + moduleName;
     specs.push("  '" + specName + "'");
