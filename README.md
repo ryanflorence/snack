@@ -1,7 +1,7 @@
-SnackJS 2.0 [WIP]
-=================
+SnackJS AMD-CofeeScript [WIP]
+=============================
 
-Experimental branch of SnackJS: AMD modules written in SnackJS.
+Experimental branch of SnackJS: AMD modules written in CoffeeScript.
 
 Install PhantomJS and run tests with `./bin/run_tests`
 
