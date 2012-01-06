@@ -11,7 +11,7 @@
     if (!nodes.length)
       nodes = [nodes]
 
-    var wrapper = Object.create(proto)
+    var wrapper = snack.beget(proto)
       , i = 0
       , l = nodes.length
 

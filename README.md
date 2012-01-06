@@ -34,7 +34,7 @@ Features
 ### Utilities
 
 - Shallow object merge with `snack.extend`
-- Prototypal inheritance with `Object.create`
+- Prototypal inheritance with `snack.beget`
 - A few other utilities (only those snack uses)
 
 Documentation

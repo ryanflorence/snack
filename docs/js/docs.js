@@ -43,7 +43,7 @@ function init (){
     , terms = $('#terms')
     , items = $('#nav > li li')
     , headers = $('#nav h2')
-    , searcher = Object.create(searchInput).init(terms[0])
+    , searcher = snack.beget(searchInput).init(terms[0])
     
   searcher.subscribe('keyup', search)
   terms.attach('click', searcher.listener.fire)
