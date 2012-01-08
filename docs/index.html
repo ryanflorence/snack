@@ -398,7 +398,7 @@ var point = {
 
   sum: function (){
     var sum = 0
-    snack.each(this.coords, function(key, value){
+    snack.each(this.coords, function(value, key){
       sum += value
     })
     return sum
@@ -414,7 +414,7 @@ var point3d = snack.create(point, {
     // if a method exists in the prototype object
     // then the method here is automatically punched
     // providing the old method as the first argument
-    old()
+    old(x, y)
     this.coords.z += z
   }
 })
