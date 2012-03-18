@@ -204,7 +204,7 @@
 
       var xhr = self.xhr
 
-      xhr.open(method.toUpperCase(), url, open.async, options.user, options.password)
+      xhr.open(method.toUpperCase(), url, options.async, options.user, options.password)
       if (options.user && 'withCredentials' in xhr) xhr.withCredentials = true
     
       xhr.onreadystatechange = snack.bind(self.onStateChange, self)
