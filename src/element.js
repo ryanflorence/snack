@@ -14,13 +14,13 @@
           return data[key]
 
         return data[key] = value
-      }  
+      }
     }(),
 
     each: function (fn, context){
       return snack.each(this, fn, context)
     },
-  
+
     addClass: function (className){
       // adapted from MooTools
       return this.each(function (element){
@@ -86,6 +86,7 @@
 
     if (data)
       snack.each(data, function (listener){
+        if( typeof args === "undefined" ) args = [];
         listener[method].apply(wrapper, args)
       })
 
