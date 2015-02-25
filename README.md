@@ -3,6 +3,11 @@ snack.js
 
 _... because sometimes, all you need is a snack._
 
+¡WARNING!
+---------
+
+I don't maintain this, so if you use it, you have assumed maintenence.
+
 Features
 --------
 
