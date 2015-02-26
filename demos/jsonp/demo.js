@@ -34,7 +34,7 @@ snack.ready(function (){
     , delayRequest
     , lastJSONP
 
-  var search = Object.create(searchInput).init(input[0])
+  var search = snack.beget(searchInput).init(input[0])
 
   // add a subscription since it's a publisher
   search.subscribe('keyup', fetch, results[0])

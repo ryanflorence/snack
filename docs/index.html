@@ -21,7 +21,7 @@
 <ul id=nav>
   <li><h2><a href="#core">core</a></h2>
     <ul>
-      <li><a href="#Object.create">Object.create</a>
+      <li><a href="#snack.beget">snack.beget</a>
       <li><a href="#snack.extend">snack.extend</a>
       <li><a href="#snack.bind">snack.bind</a>
       <li><a href="#snack.punch">snack.punch</a></li>
@@ -137,10 +137,10 @@
 
 
 
-<h2 id=Object.create><a href="#Object.create">Object.create</a></h2>
+<h2 id=snack.beget><a href="#snack.beget">snack.beget</a></h2>
 <p>Creates a new object with a defined prototype.  Helpful for prototypal inheritance and object templating.</p>
 <h3>Signature</h3>
-<pre class=sig><code>Object.create(obj)</code></pre>
+<pre class=sig><code>snack.beget(obj)</code></pre>
 <h3>Arguments</h3>
 <ol>
   <li><code>obj</code> (<b>object</b>) - The object to be used as the new object's prototype
@@ -158,7 +158,7 @@
 dad.init('Casey')
 dad.name //> 'Casey'
 
-var son = Object.create(dad)
+var son = snack.beget(dad)
 son.name //> 'Casey'
 
 son.init('Ryan')
@@ -173,18 +173,6 @@ son.cash //> 'none' ... hey, what the?!
 // because dad is the prototype of son, it inherits dad's values
 </code></pre>
 
-
-
-
-
-<h3>Notes</h3>
-<p>
-  <code>Object.create</code> is part of the <a href="http://www.ecmascript.org/docs/tc39-2009-043.pdf">ES5</a> spec.
-  This method is only implemented if it does not already exist in the environment.  This implementation, however,
-  <b>does not support the second argument</b> of the native <code>Object.create</code> method.
-</p>
-<p>Implementation taken from <a href="http://javascript.crockford.com/prototypal.html">Douglas Crockford's original version</a></p>
-<p>See also: <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object/create">MDC <code>Object.create</code></a></p>
 
 
 
@@ -371,7 +359,7 @@ widget.b //> 2 ... unchanged</code></pre>
 
 
 <h2 id=snack.create><a href="#snack.create">snack.create</a></h2>
-<p>Similar to <a href=#Object.create>Object.create</a>, except it allows for an extension object to merge into the new object. When methods are redefined in the extension object, they are automatically <a href="#snack.punch">punched</a> providing a reference to the old (or parent) method.  Useful for object templating and prototypal inheritance.</p>
+<p>Similar to <a href=#snack.beget>snack.beget</a>, except it allows for an extension object to merge into the new object. When methods are redefined in the extension object, they are automatically <a href="#snack.punch">punched</a> providing a reference to the old (or parent) method.  Useful for object templating and prototypal inheritance.</p>
 
 <h3>Signature</h3>
 <pre class=sig><code>snack.create(proto [, ext])</code></pre>

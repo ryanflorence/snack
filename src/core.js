@@ -9,15 +9,6 @@
   *  Zepto.js      (c) Thomas Fuchs       MIT License
 */
 
-if (typeof Object.create != 'function'){
-  // ES5 Obeject.create
-  Object.create = function (o){
-    function F() {}
-    F.prototype = o
-    return new F
-  }
-}
-
 !function(window){
   var snack = window.snack = {}
     , guid = 0
@@ -60,9 +51,15 @@ if (typeof Object.create != 'function'){
         return fn.apply(obj, args)
       }
     },
+    
+    beget: function (o){
+      function F() {}
+      F.prototype = o
+      return new F
+    },
 
     create: function (proto, ext){
-      var obj = Object.create(proto)
+      var obj = snack.beget(proto)
       if (!ext)
         return obj
 
