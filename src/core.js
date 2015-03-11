@@ -11,7 +11,8 @@
 
 if (typeof Object.create != 'function'){
   // ES5 Obeject.create
-  Object.create = function (o){
+  Object.create = function (o, properties){
+    if (properties != null) throw new Error("Not Implemented")
     function F() {}
     F.prototype = o
     return new F
