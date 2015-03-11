@@ -8,7 +8,7 @@
       nodes = query(nodes, context)
 
     // passed in single node
-    if (!nodes.length)
+    if (!snack.isArray(nodes))
       nodes = [nodes]
 
     var wrapper = Object.create(proto)
